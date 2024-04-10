@@ -32,6 +32,18 @@ end)
     tool.Parent = game.Players.LocalPlayer.Backpack
 end)
 
+PlayerSection:NewToggle("Infinite Jump", "Lets you infinitly jump", function(state)
+    if state then
+        print("Toggle On")
+        local player = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+        Humanoid:ChangeState('Jumping')
+        wait()
+        Humanoid:ChangeState('Seated')
+    else
+        print("Toggle Off")
+    end
+end)
+
 -- OTHER
 local Other = Window:NewTab("Other")
 local OtherSection = Other:NewSection("Other")
