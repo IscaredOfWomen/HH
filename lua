@@ -19,6 +19,18 @@ PlayerSection:NewSlider("JumpPower", "Car go space", 500, 50, function(jp) -- 50
     game.Players.LocalPlayer.Character.Humanoid.JumpPower = jp 
 end)
 
+PlayerSection:NewButton("TpTool", "Its how it sounds, you ratchet dog", function()
+    mouse = game.Players.LocalPlayer:GetMouse()
+    tool = Instance.new("Tool")
+    tool.RequiresHandle = false
+    tool.Name = "Tp tool(Equip to Click TP)"
+    tool.Activated:connect(function()
+    local pos = mouse.Hit+Vector3.new(0,2.5,0)
+    pos = CFrame.new(pos.X,pos.Y,pos.Z)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
+end)
+    tool.Parent = game.Players.LocalPlayer.Backpack
+end)
 
 -- OTHER
 local Other = Window:NewTab("Other")
