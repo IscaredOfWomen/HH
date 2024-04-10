@@ -23,7 +23,7 @@ PlayerSection:NewButton("TpTool", "Its how it sounds, you ratchet dog", function
     mouse = game.Players.LocalPlayer:GetMouse()
     tool = Instance.new("Tool")
     tool.RequiresHandle = false
-    tool.Name = "Tp tool(Equip to Click TP)"
+    tool.Name = "TpTool"
     tool.Activated:connect(function()
     local pos = mouse.Hit+Vector3.new(0,2.5,0)
     pos = CFrame.new(pos.X,pos.Y,pos.Z)
