@@ -38,7 +38,6 @@ PlayerSection:NewToggle("Infinite Jump", "Lets you infinitly jump", function(sta
     if state then
         print("Toggle On")
         Enum.Keycode.space
-        local m = plr:GetMouse()
         local plr = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
         Humanoid:ChangeState('Jumping')
         wait()
