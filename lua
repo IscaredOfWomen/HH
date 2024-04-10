@@ -4,7 +4,7 @@ local Window = Library.CreateLib("Hentai Hub", "GrapeTheme")
 
 -- MAIN
 local Main = Window:NewTab("Main")
-local MainSection = Main:NewSection("Movement")
+local MainSection = Main:NewSection("Main")
 
 
 -- LOCAL PLAYER
