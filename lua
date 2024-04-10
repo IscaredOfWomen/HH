@@ -23,3 +23,7 @@ end)
 -- OTHER
 local Other = Window:NewTab("Other")
 local OtherSection = Other:NewSection("Other")
+
+OtherSection:NewKeybind("Toggle UI", "For Computers", Enum.KeyCode.F, function()
+	Library:ToggleUI()
+end)
