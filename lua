@@ -41,10 +41,9 @@ local plr = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass
 PlayerSection:NewToggle("Infinite Jump", "Lets you infinitly jump", function(state)
     if state then
         print("Toggle On")
-        m.KeyDown:connect(function(k)
-        Humanoid:ChangeState('Jumping')
+        Humanoid:ChangeState("Jumping")
         wait()
-        Humanoid:ChangeState('Seated')
+        Humanoid:ChangeState("Seated")
     else
         print("Toggle Off")
     end
