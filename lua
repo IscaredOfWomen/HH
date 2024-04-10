@@ -2,9 +2,11 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHept
 local Window = Library.CreateLib("Hentai Hub", "GrapeTheme")
 
 
+
 -- MAIN
 local Main = Window:NewTab("Main")
 local MainSection = Main:NewSection("Main")
+
 
 
 -- LOCAL PLAYER
@@ -35,7 +37,8 @@ end)
 PlayerSection:NewToggle("Infinite Jump", "Lets you infinitly jump", function(state)
     if state then
         print("Toggle On")
-        local player = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
+        Enum.Keycode.space
+        local plr = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
         Humanoid:ChangeState('Jumping')
         wait()
         Humanoid:ChangeState('Seated')
@@ -43,6 +46,8 @@ PlayerSection:NewToggle("Infinite Jump", "Lets you infinitly jump", function(sta
         print("Toggle Off")
     end
 end)
+
+
 
 -- OTHER
 local Other = Window:NewTab("Other")
