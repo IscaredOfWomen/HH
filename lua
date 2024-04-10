@@ -34,21 +34,6 @@ end)
     tool.Parent = game.Players.LocalPlayer.Backpack
 end)
 
--- for the infinite jump
-local m = plr:GetMouse()
-local plr = game:GetService'Players'.LocalPlayer.Character:FindFirstChildOfClass('Humanoid')
-
-PlayerSection:NewToggle("Infinite Jump", "Lets you infinitly jump", function(state)
-    if state then
-        print("Toggle On")
-        Humanoid:ChangeState("Jumping")
-        wait()
-        Humanoid:ChangeState("Seated")
-    else
-        print("Toggle Off")
-    end
-end)
-
 
 
 -- OTHER
