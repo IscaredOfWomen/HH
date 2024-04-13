@@ -1,0 +1,112 @@
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+
+local Window = OrionLib:MakeWindow({Name = "Hentai Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "HHConfig"})
+--[[
+Name = <string> - The name of the UI.
+HidePremium = <bool> - Whether or not the user details shows Premium status or not.
+SaveConfig = <bool> - Toggles the config saving in the UI.
+ConfigFolder = <string> - The name of the folder where the configs are saved.
+IntroEnabled = <bool> - Whether or not to show the intro animation.
+IntroText = <string> - Text to show in the intro animation.
+IntroIcon = <string> - URL to the image you want to use in the intro animation.
+Icon = <string> - URL to the image you want displayed on the window.
+CloseCallback = <function> - Function to execute when the window is closed.
+]]
+
+local Tab = Window:MakeTab({
+	Name = "Player",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+local Section = Tab:AddSection({
+	Name = "Movement"
+})
+
+Tab:AddButton({
+	Name = "TweenTool",
+	Callback = function()
+		-- Function to tween the player to a specific position
+local function tweenToPosition(position)
+    -- Check if the position is valid
+    if position then
+        -- Tween the player's character to the specified position
+        game.Players.LocalPlayer.Character:SetPrimaryPartCFrame(CFrame.new(position))
+    else
+        warn("Invalid position")
+    end
+end
+
+-- Function to handle player input and tweening
+local function handleTweening()
+    -- Create a tool
+    local tool = Instance.new("Tool")
+    tool.RequiresHandle = false
+    tool.Name = "TweenTool"
+    
+    -- Activate function for the tool
+    tool.Activated:Connect(function()
+        -- Get the player's mouse
+        local mouse = game.Players.LocalPlayer:GetMouse()
+        
+        -- Check if the mouse is pointing at something
+        if mouse then
+            -- Get the position the mouse is pointing at
+            local targetPosition = mouse.Hit.p
+            
+            -- Tween the player to the target position
+            tweenToPosition(targetPosition)
+        end
+    end)
+    
+    -- Give the tool to the player
+    tool.Parent = game.Players.LocalPlayer.Backpack
+end
+
+-- Call the function to handle tweening
+handleTweening()
+  	end    
+})
+
+Tab:AddButton({
+	Name = "TpTool",
+	Callback = function()
+        mouse = game.Players.LocalPlayer:GetMouse()
+        tool = Instance.new("Tool")
+        tool.RequiresHandle = false
+        tool.Name = "TpTool"
+        tool.Activated:connect(function()
+        local pos = mouse.Hit+Vector3.new(0,2.5,0)
+        pos = CFrame.new(pos.X,pos.Y,pos.Z)
+        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
+    end)
+        tool.Parent = game.Players.LocalPlayer.Backpack
+  	end    
+})
+
+
+Tab:AddSlider({
+	Name = "WalkSpeed",
+	Min = 16,
+	Max = 1600,
+	Default = 16,
+	Color = Color3.fromRGB(72,0,144),
+	Increment = 1,
+	ValueName = "WalkSpeed",
+	Callback = function(ws)
+		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
+	end    
+})
+
+Tab:AddSlider({
+	Name = "Jump Power",
+	Min = 50,
+	Max = 50000,
+	Default = 50,
+	Color = Color3.fromRGB(72,0,144),
+	Increment = 1,
+	ValueName = "JumpPower",
+	Callback = function(jp)
+		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jp
+	end    
+})
