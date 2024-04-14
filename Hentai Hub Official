@@ -1,7 +1,6 @@
-local OrionLib = loadstring(game:HttpGet("https://raw.githubusercontent.com/shlexware/Orion/main/source"))()
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
-local Window = OrionLib:MakeWindow({Name = "Hentai Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionConfig"})
-
+local Window = OrionLib:MakeWindow({Name = "Hentai Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "HHConfig"})
 --[[
 Name = <string> - The name of the UI.
 HidePremium = <bool> - Whether or not the user details shows Premium status or not.
@@ -12,7 +11,7 @@ IntroText = <string> - Text to show in the intro animation.
 IntroIcon = <string> - URL to the image you want to use in the intro animation.
 Icon = <string> - URL to the image you want displayed on the window.
 CloseCallback = <function> - Function to execute when the window is closed.
-]]--
+]]
 
 local Tab = Window:MakeTab({
 	Name = "Player",
@@ -22,6 +21,77 @@ local Tab = Window:MakeTab({
 
 local Section = Tab:AddSection({
 	Name = "Movement"
+})
+
+Tab:AddButton({
+	Name = "TweenTool",
+	Callback = function()
+-- Reference to TweenService
+local TweenService = game:GetService("TweenService")
+
+-- Function to calculate the duration based on distance
+local function calculateDuration(distance)
+    -- Calculate the duration based on distance, adding 0.75 seconds for every 100 studs
+    local baseDuration = 1
+    local additionalDuration = distance / 133.33
+    return baseDuration + additionalDuration
+end
+
+-- Function to tween the player to a specific position over a duration
+local function tweenToPosition(position, duration)
+    -- Check if the position is valid
+    if position then
+        -- Get the player's character
+        local character = game.Players.LocalPlayer.Character
+        if character then
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            -- Create a new tween
+            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+            local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = CFrame.new(position)})
+            -- Play the tween
+            tween:Play()
+        end
+    else
+        warn("Invalid position")
+    end
+end
+
+-- Function to handle player input and tweening
+local function handleTweening()
+    -- Create a tool
+    local tool = Instance.new("Tool")
+    tool.RequiresHandle = false
+    tool.Name = "TweenTool"
+    
+    -- Activate function for the tool
+    tool.Activated:Connect(function()
+        -- Get the player's mouse
+        local mouse = game.Players.LocalPlayer:GetMouse()
+        
+        -- Check if the mouse is pointing at something
+        if mouse then
+            -- Get the position the mouse is pointing at
+            local targetPosition = mouse.Hit.p + Vector3.new(0, 2.5, 0) -- Adjusted position
+            
+            -- Calculate distance between player and target position
+            local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+            local distance = (playerPosition - targetPosition).magnitude
+            
+            -- Calculate the duration based on distance
+            local duration = calculateDuration(distance)
+            
+            -- Tween the player to the target position over calculated duration
+            tweenToPosition(targetPosition, duration)
+        end
+    end)
+    
+    -- Give the tool to the player
+    tool.Parent = game.Players.LocalPlayer.Backpack
+end
+
+-- Call the function to handle tweening
+handleTweening()
+  	end    
 })
 
 Tab:AddButton({
@@ -39,6 +109,7 @@ Tab:AddButton({
         tool.Parent = game.Players.LocalPlayer.Backpack
   	end    
 })
+
 
 Tab:AddSlider({
 	Name = "WalkSpeed",
@@ -65,19 +136,3 @@ Tab:AddSlider({
 		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jp
 	end    
 })
-
-
-
-local Tab = Window:MakeTab({ -- Notes From Eros: Im testing the PremiumOnly option. This part will probably stay but rn its testing.
-	Name = "Main",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = true
-})
-
---[[
-Name = <string> - The name of the tab.
-Icon = <string> - The icon of the tab.
-PremiumOnly = <bool> - Makes the tab accessible to Sirus Premium users only.
-]]
-
-OrionLib:Init()
