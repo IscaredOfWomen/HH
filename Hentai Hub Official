@@ -138,49 +138,17 @@ Tab:AddSlider({
 })
 
 Tab:AddButton({
-	Name = "Tp Player",
+	Name = "Crucifix Testing",
 	Callback = function()
--- Function to check if a player is safe
-local function isPlayerSafe(player)
-    local safeValue = player:FindFirstChild("Safe")
-    return safeValue and safeValue.Value == true
+-- Get the ProximityPrompt object
+local proximityPrompt = game.Workspace.Lobby.Shop.NormalCrucifix:FindFirstChildOfClass("ProximityPrompt")
+
+-- Check if the ProximityPrompt exists
+if proximityPrompt then
+    -- Trigger the ProximityPrompt
+    proximityPrompt:Trigger()
+else
+    warn("ProximityPrompt not found under NormalCrucifix in Shop in Lobby.")
 end
-
--- Function to teleport the LocalPlayer to a random player and make them look at the player
-local function teleportAndLookAtRandomPlayer()
-    local players = game.Players:GetPlayers()
-    local localPlayer = game.Players.LocalPlayer
-    local eligiblePlayers = {}
-
-    -- Filter out safe players
-    for _, player in ipairs(players) do
-        if player ~= localPlayer and not isPlayerSafe(player) then
-            table.insert(eligiblePlayers, player)
-        end
-    end
-
-    -- Teleport to a random eligible player
-    if #eligiblePlayers > 0 then
-        local randomIndex = math.random(1, #eligiblePlayers)
-        local targetPlayer = eligiblePlayers[randomIndex]
-        local targetPosition = targetPlayer.Character and targetPlayer.Character.HumanoidRootPart.Position
-        if targetPosition then
-            local humanoidRootPart = localPlayer.Character:FindFirstChild("HumanoidRootPart")
-            if humanoidRootPart then
-                -- Teleport the player to the target position
-                humanoidRootPart.CFrame = CFrame.new(targetPosition)
-            else
-                warn("HumanoidRootPart not found.")
-            end
-        else
-            warn("Target player has no valid position.")
-        end
-    else
-        warn("No eligible player found to teleport to.")
-    end
-end
-
--- Teleport to a random player
-teleportAndLookAtRandomPlayer()
   	end    
 })
