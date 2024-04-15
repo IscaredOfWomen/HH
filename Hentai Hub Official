@@ -147,8 +147,6 @@ local proximityPrompt = game.Workspace.Lobby.Shop.NormalCrucifix:FindFirstChildO
 if proximityPrompt then
     -- Trigger the ProximityPrompt
     proximityPrompt:Trigger()
-else
-    warn("ProximityPrompt not found under NormalCrucifix in Shop in Lobby.")
 end
   	end    
 })
