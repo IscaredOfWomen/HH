@@ -167,7 +167,10 @@ local function teleportAndLookAtRandomPlayer()
         if targetPosition then
             local humanoidRootPart = localPlayer.Character:WaitForChild("HumanoidRootPart")
             local direction = (targetPosition - humanoidRootPart.Position).unit
-            humanoidRootPart.CFrame = CFrame.new(targetPosition) * CFrame.Angles(0, math.atan2(direction.X, direction.Z), 0)
+            -- Calculate the angle to rotate the player towards the target
+            local angle = math.atan2(direction.X, direction.Z)
+            -- Rotate the player
+            humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position) * CFrame.Angles(0, -angle, 0)
         else
             warn("Target player has no valid position.")
         end
