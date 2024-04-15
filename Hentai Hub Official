@@ -144,9 +144,11 @@ Tab:AddButton({
 local function teleportAndLookAt(position)
     local character = game.Players.LocalPlayer.Character
     if character then
+        local humanoid = character:WaitForChild("Humanoid")
         local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
         local targetPosition = Vector3.new(position.X, humanoidRootPart.Position.Y, position.Z) -- Make sure to look at the same Y-level
         humanoidRootPart.CFrame = CFrame.new(position, targetPosition)
+        humanoid.Seated = true -- Prevents the player from falling
     end
 end
 
