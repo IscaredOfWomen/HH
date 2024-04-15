@@ -147,7 +147,7 @@ local function teleportAndLookAt(position)
         local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
         local targetPosition = Vector3.new(position.X, humanoidRootPart.Position.Y, position.Z) -- Make sure to look at the same Y-level
         local direction = (targetPosition - humanoidRootPart.Position).unit
-        humanoidRootPart.CFrame = CFrame.new(humanoidRootPart.Position, targetPosition)
+        humanoidRootPart.CFrame = CFrame.new(targetPosition)
     end
 end
 
