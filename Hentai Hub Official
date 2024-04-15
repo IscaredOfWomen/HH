@@ -140,12 +140,13 @@ Tab:AddSlider({
 Tab:AddButton({
 	Name = "Tp Player",
 	Callback = function()
--- Function to teleport the player to a given position
-local function teleportPlayer(position)
+-- Function to teleport the player to a given position and make them look at a target position
+local function teleportAndLookAt(position)
     local character = game.Players.LocalPlayer.Character
     if character then
         local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-        humanoidRootPart.CFrame = CFrame.new(position)
+        local targetPosition = Vector3.new(position.X, humanoidRootPart.Position.Y, position.Z) -- Make sure to look at the same Y-level
+        humanoidRootPart.CFrame = CFrame.new(position, targetPosition)
     end
 end
 
@@ -155,28 +156,33 @@ local function isPlayerSafe(player)
     return safeValue and safeValue.Value == true
 end
 
--- Function to find a player to teleport to
-local function findPlayerToTeleport()
+-- Function to find a random player to teleport to
+local function findRandomPlayerToTeleport()
     local players = game.Players:GetPlayers()
+    local eligiblePlayers = {}
     for _, player in ipairs(players) do
         if player ~= game.Players.LocalPlayer and not isPlayerSafe(player) then
-            return player
+            table.insert(eligiblePlayers, player)
         end
     end
-    return nil
+    if #eligiblePlayers > 0 then
+        return eligiblePlayers[math.random(1, #eligiblePlayers)]
+    else
+        return nil
+    end
 end
 
--- Function to run the teleportation script
-local function teleportToPlayer()
-    local playerToTeleport = findPlayerToTeleport()
+-- Function to run the teleportation and look at script
+local function teleportAndLookAtRandomPlayer()
+    local playerToTeleport = findRandomPlayerToTeleport()
     if playerToTeleport then
-        teleportPlayer(playerToTeleport.Character.HumanoidRootPart.Position)
+        teleportAndLookAt(playerToTeleport.Character.HumanoidRootPart.Position)
     else
         warn("No eligible player found to teleport to.")
     end
 end
 
--- Run the teleportation script
-teleportToPlayer()
+-- Run the teleportation and look at script
+teleportAndLookAtRandomPlayer()
   	end    
 })
