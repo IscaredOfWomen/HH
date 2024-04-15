@@ -149,6 +149,8 @@ local function teleportAndLookAt(position)
         local targetPosition = Vector3.new(position.X, humanoidRootPart.Position.Y, position.Z) -- Make sure to look at the same Y-level
         humanoidRootPart.CFrame = CFrame.new(position, targetPosition)
         humanoid.Seated = true -- Prevents the player from falling
+        character:SetPrimaryPartCFrame(humanoidRootPart.CFrame) -- Ensures the character stays at the new position
+        character:MoveTo(humanoidRootPart.Position) -- Moves the character to the new position
     end
 end
 
