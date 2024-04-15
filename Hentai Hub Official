@@ -140,6 +140,12 @@ Tab:AddSlider({
 Tab:AddButton({
 	Name = "Tp Player",
 	Callback = function()
+-- Function to check if a player is safe
+local function isPlayerSafe(player)
+    local safeValue = game.Workspace:FindFirstChild(player.Name.."Safe")
+    return safeValue and safeValue.Value == true
+end
+
 -- Function to teleport the LocalPlayer to a random player and make them look at the player
 local function teleportAndLookAtRandomPlayer()
     local players = game.Players:GetPlayers()
@@ -149,8 +155,7 @@ local function teleportAndLookAtRandomPlayer()
     -- Filter out safe players
     for _, player in ipairs(players) do
         if player ~= localPlayer then
-            local safeValue = game.Workspace:FindFirstChild(player.Name.."Safe")
-            if not safeValue or safeValue.Value ~= true then
+            if not isPlayerSafe(player) then
                 table.insert(eligiblePlayers, player)
             end
         end
