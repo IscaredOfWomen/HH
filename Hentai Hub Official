@@ -154,10 +154,8 @@ local function teleportAndLookAtRandomPlayer()
 
     -- Filter out safe players
     for _, player in ipairs(players) do
-        if player ~= localPlayer then
-            if not isPlayerSafe(player) then
-                table.insert(eligiblePlayers, player)
-            end
+        if player ~= localPlayer and not isPlayerSafe(player) then
+            table.insert(eligiblePlayers, player)
         end
     end
 
