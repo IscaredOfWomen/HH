@@ -190,3 +190,48 @@ end
 teleportAndLookAtRandomPlayer()
   	end    
 })
+
+Tab:AddToggle({
+	Name = "This is a toggle!",
+	Default = false,
+	Callback = function(Value)
+local TweenService = game:GetService("TweenService")
+
+-- Function to tween the player to a given position
+local function tweenPlayer(position)
+    local character = game.Players.LocalPlayer.Character
+    if character then
+        local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+        
+        -- Create a new tween
+        local tweenInfo = TweenInfo.new(1, Enum.EasingStyle.Linear)
+        local goal = {Position = position}
+        local tween = TweenService:Create(humanoidRootPart, tweenInfo, goal)
+        
+        -- Play the tween
+        tween:Play()
+    end
+end
+
+-- Function to check for coins and tween the player to them
+local function checkAndTween()
+    local coinsFolder = game.Workspace.COINS
+    if coinsFolder then
+        for _, coin in ipairs(coinsFolder:GetChildren()) do
+            if coin.Name == "CoinCrucifix_Drop" or coin.Name == "BigCoin_Drop" then
+                tweenPlayer(coin.Position)
+                wait(1) -- Adjust the delay after tweening as needed
+            elseif coin.Name == "Coin_Drop" then
+                tweenPlayer(coin.Position)
+                wait(3) -- Adjust the delay after tweening for "Coin_Drop"
+            end
+        end
+    end
+end
+
+-- Continuously check for coins and tween the player
+while true do
+    checkAndTween()
+    wait(1) -- Adjust the delay between checks as needed
+end
+	end    
