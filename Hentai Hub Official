@@ -204,7 +204,7 @@ CPTab:AddDropdown({
 	end    
 })
 
-PlayerTab:AddButton({
+CPTab:AddButton({
 	Name = "DEATH TO MASMAS_NAT8",
 	Callback = function()
 -- Get the LocalPlayer and find the player named "Masmas_nat8"
