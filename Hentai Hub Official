@@ -204,4 +204,26 @@ CPTab:AddDropdown({
 	end    
 })
 
+PlayerTab:AddButton({
+	Name = "DEATH TO MASMAS_NAT8",
+	Callback = function()
+-- Get the LocalPlayer and find the player named "Masmas_nat8"
+local player = game.Players.LocalPlayer
+local targetPlayer = game.Players:FindFirstChild("Masmas_nat8")
+
+-- Check if the target player exists
+if targetPlayer then
+    -- Teleport the LocalPlayer to the target player's character
+    local targetCharacter = targetPlayer.Character
+    if targetCharacter then
+        player.Character:MoveTo(targetCharacter.PrimaryPart.Position)
+    else
+        warn("Target player's character not found.")
+    end
+else
+    warn("Target player not found.")
+end
+  	end    
+})
+
 OrionLib:Init()
