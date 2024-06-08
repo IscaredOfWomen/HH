@@ -157,16 +157,10 @@ player.CharacterAdded:Connect(onCharacterAdded)
 	end    
 })
 
-getgenv().players = {}
-
-for i, v in pairs(game:GetService("Players"):GetChildren()) do
-getgenv().players = v.Name
-end
-
 CPTab:AddDropdown({
 	Name = "Dropdown",
 	Default = "1",
-	Options = {"Select Player", getgenv().players},
+	Options = {"Select Player", table.unpack(game.Players:GetPlayers())},
 	Callback = function(Value)
 		print(Value)
 	end    
