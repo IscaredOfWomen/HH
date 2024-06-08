@@ -26,71 +26,33 @@ local Section = PlayerTab:AddSection({
 PlayerTab:AddButton({
 	Name = "TweenTool",
 	Callback = function()
--- Reference to TweenService
-local TweenService = game:GetService("TweenService")
+        local TweenService = game:GetService("TweenService")
 
--- Function to calculate the duration based on distance
-local function calculateDuration(distance)
-    -- Calculate the duration based on distance, adding 0.75 seconds for every 100 studs
-    local baseDuration = 1
-    local additionalDuration = distance / 133.33
-    return baseDuration + additionalDuration
-end
-
--- Function to tween the player to a specific position over a duration
-local function tweenToPosition(position, duration)
-    -- Check if the position is valid
-    if position then
-        -- Get the player's character
-        local character = game.Players.LocalPlayer.Character
-        if character then
-            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-            -- Create a new tween
-            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
-            local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = CFrame.new(position)})
-            -- Play the tween
-            tween:Play()
-        end
-    else
-        warn("Invalid position")
-    end
-end
-
--- Function to handle player input and tweening
-local function handleTweening()
-    -- Create a tool
-    local tool = Instance.new("Tool")
-    tool.RequiresHandle = false
-    tool.Name = "TweenTool"
-    
-    -- Activate function for the tool
-    tool.Activated:Connect(function()
-        -- Get the player's mouse
-        local mouse = game.Players.LocalPlayer:GetMouse()
+        local function handleTweening()
+            local tool = Instance.new("Tool")
+            tool.RequiresHandle = false
+            tool.Name = "TweenTool"
+            
+            tool.Activated:Connect(function()
+                local userInputService = game:GetService("UserInputService")
         
-        -- Check if the mouse is pointing at something
-        if mouse then
-            -- Get the position the mouse is pointing at
-            local targetPosition = mouse.Hit.p + Vector3.new(0, 2.5, 0) -- Adjusted position
-            
-            -- Calculate distance between player and target position
-            local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-            local distance = (playerPosition - targetPosition).magnitude
-            
-            -- Calculate the duration based on distance
-            local duration = calculateDuration(distance)
-            
-            -- Tween the player to the target position over calculated duration
-            tweenToPosition(targetPosition, duration)
-        end
-    end)
-    
-    -- Give the tool to the player
-    tool.Parent = game.Players.LocalPlayer.Backpack
-end
-
--- Call the function to handle tweening
-handleTweening()
+                local function GetMousePosition()
+                    local mouse = game.Players.LocalPlayer:GetMouse()
+                    local x, y = mouse.X, mouse.Y
+                    return x, Y
+            end)
+        
+            game.Players.LocalPlayer.PlayerAdded:Connect(function(player)
+                local character = player.Character or player.CharacterAdded:Wait()
+                local hrp = character:WaitForChild("HumanoidRootPart")
+                
+                local info = TweenInfo.new(2)
+        
+                local Animation = TweenServiceCreate(hrp, info, {CFrame.new = GetMousePosition})
+            tool.Parent = game.Players.LocalPlayer.Backpack
+            end)
+        
+        handleTweening()z
   	end    
 })
 
@@ -195,35 +157,19 @@ player.CharacterAdded:Connect(onCharacterAdded)
 	end    
 })
 
+getgenv().players = {}
+
+for i, v in pairs(game:GetService("Players"):GetChildren()) do
+getgenv().players = v.Name
+end
+
 CPTab:AddDropdown({
 	Name = "Dropdown",
 	Default = "1",
-	Options = {"Select Player", table.unpack(game.Players:GetPlayers())},
+	Options = {"Select Player", getgenv().players},
 	Callback = function(Value)
 		print(Value)
 	end    
-})
-
-CPTab:AddButton({
-	Name = "DEATH TO MASMAS_NAT8",
-	Callback = function()
--- Get the LocalPlayer and find the player named "Masmas_nat8"
-local player = game.Players.LocalPlayer
-local targetPlayer = game.Players:FindFirstChild("Masmas_nat8")
-
--- Check if the target player exists
-if targetPlayer then
-    -- Teleport the LocalPlayer to the target player's character
-    local targetCharacter = targetPlayer.Character
-    if targetCharacter then
-        player.Character:MoveTo(targetCharacter.PrimaryPart.Position)
-    else
-        warn("Target player's character not found.")
-    end
-else
-    warn("Target player not found.")
-end
-  	end    
 })
 
 OrionLib:Init()
