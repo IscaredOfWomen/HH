@@ -158,8 +158,8 @@ player.CharacterAdded:Connect(onCharacterAdded)
 })
 
 CPTab:AddDropdown({
-	Name = "Dropdown",
-	Default = "1",
+	Name = "Player",
+	Default = "Select Player",
 	Options = {"Select Player", table.unpack(game.Players:GetPlayers())},
 	Callback = function(Value)
 		print(Value)
