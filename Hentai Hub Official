@@ -26,34 +26,72 @@ local Section = PlayerTab:AddSection({
 PlayerTab:AddButton({
 	Name = "TweenTool",
 	Callback = function()
-        local TweenService = game:GetService("TweenService")
+        -- Reference to TweenService
+local TweenService = game:GetService("TweenService")
 
-        local function handleTweening()
-            local tool = Instance.new("Tool")
-            tool.RequiresHandle = false
-            tool.Name = "TweenTool"
+-- Function to calculate the duration based on distance
+local function calculateDuration(distance)
+    -- Calculate the duration based on distance, adding 0.75 seconds for every 100 studs
+    local baseDuration = 1
+    local additionalDuration = distance / 133.33
+    return baseDuration + additionalDuration
+end
+
+-- Function to tween the player to a specific position over a duration
+local function tweenToPosition(position, duration)
+    -- Check if the position is valid
+    if position then
+        -- Get the player's character
+        local character = game.Players.LocalPlayer.Character
+        if character then
+            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+            -- Create a new tween
+            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
+            local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = CFrame.new(position)})
+            -- Play the tween
+            tween:Play()
+        end
+    else
+        warn("Invalid position")
+    end
+end
+
+-- Function to handle player input and tweening
+local function handleTweening()
+    -- Create a tool
+    local tool = Instance.new("Tool")
+    tool.RequiresHandle = false
+    tool.Name = "TweenTool"
+    
+    -- Activate function for the tool
+    tool.Activated:Connect(function()
+        -- Get the player's mouse
+        local mouse = game.Players.LocalPlayer:GetMouse()
+        
+        -- Check if the mouse is pointing at something
+        if mouse then
+            -- Get the position the mouse is pointing at
+            local targetPosition = mouse.Hit.p + Vector3.new(0, 2.5, 0) -- Adjusted position
             
-            tool.Activated:Connect(function()
-                local userInputService = game:GetService("UserInputService")
-        
-                local function GetMousePosition()
-                    local mouse = game.Players.LocalPlayer:GetMouse()
-                    local x, y = mouse.X, mouse.Y
-                    return x, Y
-            end)
-        
-            game.Players.LocalPlayer.PlayerAdded:Connect(function(player)
-                local character = player.Character or player.CharacterAdded:Wait()
-                local hrp = character:WaitForChild("HumanoidRootPart")
-                
-                local info = TweenInfo.new(2)
-        
-                local Animation = TweenServiceCreate(hrp, info, {CFrame.new = GetMousePosition})
-            tool.Parent = game.Players.LocalPlayer.Backpack
-            end)
-        
-        handleTweening()z
-  	end    
+            -- Calculate distance between player and target position
+            local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
+            local distance = (playerPosition - targetPosition).magnitude
+            
+            -- Calculate the duration based on distance
+            local duration = calculateDuration(distance)
+            
+            -- Tween the player to the target position over calculated duration
+            tweenToPosition(targetPosition, duration)
+        end
+    end)
+    
+    -- Give the tool to the player
+    tool.Parent = game.Players.LocalPlayer.Backpack
+end
+
+-- Call the function to handle tweening
+handleTweening()
+    end
 })
 
 PlayerTab:AddButton({
@@ -71,7 +109,6 @@ PlayerTab:AddButton({
         tool.Parent = game.Players.LocalPlayer.Backpack
   	end    
 })
-
 
 PlayerTab:AddSlider({
 	Name = "WalkSpeed",
@@ -99,71 +136,51 @@ PlayerTab:AddSlider({
 	end    
 })
 
--- Crucifix PlayGround
+-- Mowing Simulator
 
-local CPTab = Window:MakeTab({
-	Name = "Crucifix PlayGround",
+local MSTab = Window:MakeTab({
+	Name = "Mowing Simulator",
 	Icon = "rbxassetid://4483345998",
 	PremiumOnly = false
 })
 
-local Section = CPTab:AddSection({
+local Section = MSTab:AddSection({
 	Name = "Player"
 })
 
-CPTab:AddToggle({
-	Name = "Auto Coin",
-	Default = false,
-	Callback = function(Value)
--- Get the LocalPlayer
-local player = game.Players.LocalPlayer
-
--- Function to adjust the hitbox size and disable collision
-local function adjustHitbox(character)
-    -- Find the HumanoidRootPart of the character
-    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-
-    -- Adjust the size of the HumanoidRootPart if found
-    if humanoidRootPart then
-        -- Define the desired size (adjust as needed)
-        local newSize = Vector3.new(4000, 2, 4000)
-
-        -- Ensure the size is within reasonable bounds to avoid crashes
-        if newSize.X >= 2 and newSize.Y >= 2 and newSize.Z >= 2 then
-            humanoidRootPart.Size = newSize
-        else
-            warn("Hitbox size is too small, skipping adjustment.")
+MSTab:AddButton({
+	Name = "collect bolts",
+	Callback = function()
+        local function moveToPlayer(part)
+            local player = game.Players.LocalPlayer
+            if player and part then
+                local character = player.Character
+                if character then
+                    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+                    if humanoidRootPart then
+                        part.CFrame = humanoidRootPart.CFrame
+                    end
+                end
+            end
         end
-
-        -- Disable collision for the hitbox
-        humanoidRootPart.CanCollide = false
-    else
-        warn("HumanoidRootPart not found.")
-    end
-end
-
--- Adjust the hitbox size and disable collision when the character is added
-local function onCharacterAdded(character)
-    adjustHitbox(character)
-end
-
--- Check if the character already exists
-if player.Character then
-    adjustHitbox(player.Character)
-end
-
--- Connect the function to adjust hitbox size and disable collision when the character is added
-player.CharacterAdded:Connect(onCharacterAdded)
-	end    
-})
-
-CPTab:AddDropdown({
-	Name = "Player",
-	Default = "Select Player",
-	Options = {"Select Player", table.unpack(game.Players:GetPlayers())},
-	Callback = function(Value)
-		print(Value)
-	end    
+        
+        -- Function to move all parts in workspace.Active.Bolts to the player's position
+        local function moveAllBoltsToPlayer()
+            while true do
+                local bolts = workspace.Active.Bolts:GetChildren()
+                
+                for _, bolt in ipairs(bolts) do
+                    moveToPlayer(bolt)
+                    wait(0.2) -- Adding a short delay between moves
+                end
+        
+                wait(1) -- Adding a delay before checking for new bolts again
+            end
+        end
+        
+        -- Start the process of moving all bolts to the player's position
+        moveAllBoltsToPlayer()        
+  	end    
 })
 
 OrionLib:Init()
