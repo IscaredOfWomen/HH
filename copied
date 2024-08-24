@@ -1,5 +1,3 @@
-loadstring(game:HttpGet("https://rawscripts.net/raw/Blox-Fruits-Super-PvP-Script-VeryOP-TP-With-SoulGuitar-II-SafeMode-V40-17061"))()
-
 getgenv().Configs = {
      ["Team"] = "Pirates", -- Pirates/Marines
      ["Auto Ken"] = true,
