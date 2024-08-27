@@ -14,7 +14,7 @@ getgenv().Configs = {
      ["Run When Low Health"] = {
          ["Enable"] = true,
          ["Health"] = 3500,
-         ["Come back"] = false
+         ["Come back"] = true
      },
      ["Region"] = "???", -- Singapore, United States, Germany, France, India, ??? ...
      ["Weapons"] = {
