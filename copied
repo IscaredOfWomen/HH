@@ -4,7 +4,7 @@ getgenv().Configs = {
      ["Auto Buso"] = true,
      ["Auto turn on race v3"] = true,
      ["Auto turn on race v4"] = true,
-     ["FPS Boost"] = true,
+     ["FPS Boost"] = false,
      ["Click Time"] = 0.2,
      ["Bypass TP"] = true,
      ["Chat"] = {
@@ -14,7 +14,7 @@ getgenv().Configs = {
      ["Run When Low Health"] = {
          ["Enable"] = true,
          ["Health"] = 3500,
-         ["Come back"] = true
+         ["Come back"] = false
      },
      ["Region"] = "???", -- Singapore, United States, Germany, France, India, ??? ...
      ["Weapons"] = {
