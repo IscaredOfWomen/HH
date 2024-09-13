@@ -1,7 +1,7 @@
 #!/data/data/com.termux/files/usr/bin/bash -e
 
 VERSION=2024022001
-BASE_URL=https://kali.download/nethunter-images/current/rootfs
+BASE_URL=https://kali.download/nethunter-images
 USERNAME=kali
 
 
@@ -103,8 +103,8 @@ function set_strings() {
     ####
 
     CHROOT=kali-${SYS_ARCH}
-    IMAGE_NAME=kali-nethunter-rootfs-${wimg}-${SYS_ARCH}.tar.xz
-    SHA_NAME=kalifs-${SYS_ARCH}-${wimg}.sha512sum
+    IMAGE_NAME=current/rootfs/kali-nethunter-rootfs-${wimg}-${SYS_ARCH}.tar.xz
+    SHA_NAME=kali-2024.2/rootfs/kalifs-${SYS_ARCH}-${wimg}.sha512sum
 }    
 
 function prepare_fs() {
