@@ -331,63 +331,67 @@ startLoop()
   	end    
 })
 
--- Crucifix PlayGround
-
+-- Crucifix Playground Tab Fix
 local CPTab = Window:MakeTab({
-	Name = "Crucifix PlayGround",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+    Name = "Crucifix Playground",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
 local Section = CPTab:AddSection({
-	Name = "Player"
+    Name = "Player"
 })
 
+-- Auto Coin Toggle
 CPTab:AddToggle({
-	Name = "Auto Coin",
-	Default = false,
-	Callback = function(Value)
--- Get the LocalPlayer
-local player = game.Players.LocalPlayer
+    Name = "Auto Coin",
+    Default = false,
+    Callback = function(Value)
+        local player = game.Players.LocalPlayer
 
--- Function to adjust the hitbox size and disable collision
-local function adjustHitbox(character)
-    -- Find the HumanoidRootPart of the character
-    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
+        -- Function to adjust the hitbox size and disable collision
+        local function adjustHitbox(character)
+            local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
 
-    -- Adjust the size of the HumanoidRootPart if found
-    if humanoidRootPart then
-        -- Define the desired size (adjust as needed)
-        local newSize = Vector3.new(4000, 2, 4000)
+            if humanoidRootPart then
+                local newSize = Vector3.new(50, 2, 50) -- Adjusted to a reasonable size
 
-        -- Ensure the size is within reasonable bounds to avoid crashes
-        if newSize.X >= 2 and newSize.Y >= 2 and newSize.Z >= 2 then
-            humanoidRootPart.Size = newSize
-        else
-            warn("Hitbox size is too small, skipping adjustment.")
+                -- Ensure the size is reasonable
+                if newSize.X >= 2 and newSize.Y >= 2 and newSize.Z >= 2 then
+                    humanoidRootPart.Size = newSize
+                    humanoidRootPart.CanCollide = false
+                else
+                    warn("Hitbox size is too small, skipping adjustment.")
+                end
+            else
+                warn("HumanoidRootPart not found.")
+            end
         end
 
-        -- Disable collision for the hitbox
-        humanoidRootPart.CanCollide = false
-    else
-        warn("HumanoidRootPart not found.")
+        -- Adjust hitbox size when the character is added
+        local function onCharacterAdded(character)
+            adjustHitbox(character)
+        end
+
+        if Value then
+            -- If toggled on, adjust the current character's hitbox and connect to future characters
+            if player.Character then
+                adjustHitbox(player.Character)
+            end
+
+            player.CharacterAdded:Connect(onCharacterAdded)
+        else
+            -- If toggled off, reset hitbox size and re-enable collision
+            if player.Character then
+                local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
+                if humanoidRootPart then
+                    humanoidRootPart.Size = Vector3.new(2, 2, 1) -- Default size
+                    humanoidRootPart.CanCollide = true
+                end
+            end
+        end
     end
-end
-
--- Adjust the hitbox size and disable collision when the character is added
-local function onCharacterAdded(character)
-    adjustHitbox(character)
-end
-
--- Check if the character already exists
-if player.Character then
-    adjustHitbox(player.Character)
-end
-
---Connect the function to adjust hitbox size and disable collision when the character is added
-player.CharacterAdded:Connect(onCharacterAdded)
-	end    
 })
 
 CPTab:AddDropdown({
-OrionLib:Init()
+OrionLib:Init() 
