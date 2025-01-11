@@ -1,397 +1,129 @@
-local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+local OrionLib = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Orion/main/source'))()
 
-local Window = OrionLib:MakeWindow({Name = "Hentai Hub", HidePremium = false, SaveConfig = true, ConfigFolder = "HHConfig"})
---[[
-Name = <string> - The name of the UI.
-HidePremium = <bool> - Whether or not the user details shows Premium status or not.
-SaveConfig = <bool> - Toggles the config saving in the UI.
-ConfigFolder = <string> - The name of the folder where the configs are saved.
-IntroEnabled = <bool> - Whether or not to show the intro animation.
-IntroText = <string> - Text to show in the intro animation.
-IntroIcon = <string> - URL to the image you want to use in the intro animation.
-Icon = <string> - URL to the image you want displayed on the window.
-CloseCallback = <function> - Function to execute when the window is closed.
-]]
+local Window = OrionLib:MakeWindow({
+    Name = "Hentai Hub",
+    HidePremium = false,
+    SaveConfig = true,
+    ConfigFolder = "HHConfig"
+})
 
 local PlayerTab = Window:MakeTab({
-	Name = "Player",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+    Name = "Player",
+    Icon = "rbxassetid://4483345998",
+    PremiumOnly = false
 })
 
-local Section = PlayerTab:AddSection({
-	Name = "Movement"
-})
+local Section = PlayerTab:AddSection({ Name = "Movement" })
 
 PlayerTab:AddButton({
-	Name = "TweenTool",
-	Callback = function()
-        -- Reference to TweenService
-local TweenService = game:GetService("TweenService")
+    Name = "TweenTool",
+    Callback = function()
+        local TweenService = game:GetService("TweenService")
 
--- Function to calculate the duration based on distance
-local function calculateDuration(distance)
-    -- Calculate the duration based on distance, adding 0.75 seconds for every 100 studs
-    local baseDuration = 1
-    local additionalDuration = distance / 133.33
-    return baseDuration + additionalDuration
-end
-
--- Function to tween the player to a specific position over a duration
-local function tweenToPosition(position, duration)
-    -- Check if the position is valid
-    if position then
-        -- Get the player's character
-        local character = game.Players.LocalPlayer.Character
-        if character then
-            local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-            -- Create a new tween
-            local tweenInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut)
-            local tween = TweenService:Create(humanoidRootPart, tweenInfo, {CFrame = CFrame.new(position)})
-            -- Play the tween
-            tween:Play()
-        end
-    else
-        warn("Invalid position")
-    end
-end
-
--- Function to handle player input and tweening
-local function handleTweening()
-    -- Create a tool
-    local tool = Instance.new("Tool")
-    tool.RequiresHandle = false
-    tool.Name = "TweenTool"
-    
-    -- Activate function for the tool
-    tool.Activated:Connect(function()
-        -- Get the player's mouse
-        local mouse = game.Players.LocalPlayer:GetMouse()
-        
-        -- Check if the mouse is pointing at something
-        if mouse then
-            -- Get the position the mouse is pointing at
-            local targetPosition = mouse.Hit.p + Vector3.new(0, 2.5, 0) -- Adjusted position
-            
-            -- Calculate distance between player and target position
-            local playerPosition = game.Players.LocalPlayer.Character.HumanoidRootPart.Position
-            local distance = (playerPosition - targetPosition).magnitude
-            
-            -- Calculate the duration based on distance
-            local duration = calculateDuration(distance)
-            
-            -- Tween the player to the target position over calculated duration
-            tweenToPosition(targetPosition, duration)
-        end
-    end)
-    
-    -- Give the tool to the player
-    tool.Parent = game.Players.LocalPlayer.Backpack
-end
-
--- Call the function to handle tweening
-handleTweening()
-    end
-})
-
-PlayerTab:AddButton({
-	Name = "TpTool",
-	Callback = function()
-        mouse = game.Players.LocalPlayer:GetMouse()
-        tool = Instance.new("Tool")
+        local tool = Instance.new("Tool")
         tool.RequiresHandle = false
-        tool.Name = "TpTool"
-        tool.Activated:connect(function()
-        local pos = mouse.Hit+Vector3.new(0,2.5,0)
-        pos = CFrame.new(pos.X,pos.Y,pos.Z)
-        game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = pos
-    end)
-        tool.Parent = game.Players.LocalPlayer.Backpack
-  	end    
-})
+        tool.Name = "TweenTool"
+        tool.Activated:Connect(function()
+            local mouse = game.Players.LocalPlayer:GetMouse()
+            local targetPosition = mouse.Hit.p
 
-PlayerTab:AddSlider({
-	Name = "WalkSpeed",
-	Min = 16,
-	Max = 1600,
-	Default = 16,
-	Color = Color3.fromRGB(72,0,144),
-	Increment = 1,
-	ValueName = "WalkSpeed",
-	Callback = function(ws)
-		game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
-	end    
-})
-
-PlayerTab:AddSlider({
-	Name = "Jump Power",
-	Min = 50,
-	Max = 50000,
-	Default = 50,
-	Color = Color3.fromRGB(72,0,144),
-	Increment = 1,
-	ValueName = "JumpPower",
-	Callback = function(jp)
-		game.Players.LocalPlayer.Character.Humanoid.JumpPower = jp
-	end    
-})
-
--- Mowing Simulator
-
-local MSTab = Window:MakeTab({
-	Name = "Mowing Simulator",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local Section = MSTab:AddSection({
-	Name = "Player"
-})
-
-MSTab:AddButton({
-	Name = "collect bolts",
-	Callback = function()
-        local function moveToPlayer(part)
-            local player = game.Players.LocalPlayer
-            if player and part then
-                local character = player.Character
-                if character then
-                    local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-                    if humanoidRootPart then
-                        part.CFrame = humanoidRootPart.CFrame
-                    end
-                end
-            end
-        end
-        
-        -- Function to move all parts in workspace.Active.Bolts to the player's position
-        local function moveAllBoltsToPlayer()
-            while true do
-                local bolts = workspace.Active.Bolts:GetChildren()
-                
-                for _, bolt in ipairs(bolts) do
-                    moveToPlayer(bolt)
-                    wait(0.2) -- Adding a short delay between moves
-                end
-        
-                wait(1) -- Adding a delay before checking for new bolts again
-            end
-        end
-        
-        -- Start the process of moving all bolts to the player's position
-        moveAllBoltsToPlayer()        
-  	end    
-})
-
--- BloxFruits
-
-local BFTab = Window:MakeTab({
-	Name = "BloxFruits",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
-
-local Section = BFTab:AddSection({
-	Name = "visuals"
-})
-
-BFTab:AddButton({
-	Name = "ESP",
-	Callback = function()
--- Function to add a red box around a player's character
-local function addRedBox(character)
-    -- List of parts to add hitboxes to for both R15 and R6 rigs
-    local parts = {
-        "Head", "UpperTorso", "LowerTorso", -- Common parts
-        "LeftUpperArm", "RightUpperArm", "LeftLowerArm", "RightLowerArm", "LeftHand", "RightHand", -- R15 parts
-        "LeftUpperLeg", "RightUpperLeg", "LeftLowerLeg", "RightLowerLeg", "LeftFoot", "RightFoot" -- R15 parts
-    }
-
-    -- Check if hitboxes are already applied
-    local hasRedBox = character:FindFirstChild("RedHitboxMarker")
-    if hasRedBox then
-        return -- Skip if hitboxes are already applied
-    end
-
-    -- Iterate through each part and add a red BoxHandleAdornment
-    for _, partName in ipairs(parts) do
-        local part = character:FindFirstChild(partName)
-        if part then
-            local redBox = Instance.new("BoxHandleAdornment")
-            redBox.Adornee = part
-            redBox.Size = part.Size
-            redBox.Color3 = Color3.new(1, 0, 0) -- Red color
-            redBox.Transparency = 0.5 -- Semi-transparent
-            redBox.AlwaysOnTop = true -- Display on top of other objects, including walls
-            redBox.ZIndex = 5 -- Ensure it's rendered above other parts
-            redBox.Name = "RedHitboxMarker" -- Mark this as applied hitbox
-            redBox.Parent = part
-        end
-    end
-
-    -- Add a variable to the player to indicate hitboxes are applied
-    local hasRedHitbox = Instance.new("BoolValue")
-    hasRedHitbox.Name = "HasRedHitbox"
-    hasRedHitbox.Value = true
-    hasRedHitbox.Parent = character
-end
-
--- Function to add a health display below a player's character's feet
-local function addHealthDisplay(character)
-    -- Create a BillboardGui for health display
-    local billboardGui = Instance.new("BillboardGui")
-    billboardGui.Size = UDim2.new(0, 100, 0, 40) -- Size of the Gui
-    billboardGui.StudsOffset = Vector3.new(0, -5, 0) -- Offset below the character's feet
-    billboardGui.AlwaysOnTop = true -- Display on top of other objects, including walls
-    billboardGui.MaxDistance = 100 -- Maximum distance from camera to maintain size
-    
-    -- Create a TextLabel to show health
-    local healthLabel = Instance.new("TextLabel")
-    healthLabel.Size = UDim2.new(1, 0, 1, 0)
-    healthLabel.Text = "Health: " .. tostring(character.Humanoid.Health)
-    healthLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red color
-    healthLabel.BackgroundTransparency = 1 -- Transparent background
-    healthLabel.Font = Enum.Font.SourceSansBold
-    healthLabel.TextSize = 16
-    healthLabel.Parent = billboardGui
-
-    -- Attach BillboardGui to the character's Head
-    local head = character:FindFirstChild("Head")
-    if head then
-        billboardGui.Adornee = head
-        billboardGui.Parent = head
-    else
-        warn("Head not found for player: " .. character.Name)
-    end
-    
-    -- Function to update the size of the billboard based on camera distance
-    local function updateBillboardSize()
-        local camera = game.Workspace.CurrentCamera
-        if camera then
-            local distance = (head.Position - camera.CFrame.Position).Magnitude
-            local scaleFactor = math.clamp(distance / billboardGui.MaxDistance, 0.5, 2) -- Adjust these values as needed
-            billboardGui.Size = UDim2.new(0, 100 * scaleFactor, 0, 40 * scaleFactor)
-        end
-    end
-    
-    -- Connect the update function to renderStepped to continuously update size
-    game:GetService("RunService").RenderStepped:Connect(updateBillboardSize)
-end
-
--- Function to add a red box around a player's character and health display
-local function addRedBoxAndHealthDisplay(character)
-    -- Add red box around the player's character
-    addRedBox(character)
-    
-    -- Add health display below the player's character's feet
-    addHealthDisplay(character)
-end
-
--- Function to handle applying red boxes and health displays to all existing players
-local function applyVisualsToExistingPlayers()
-    for _, player in ipairs(game.Players:GetPlayers()) do
-        local character = player.Character
-        if character and not character:FindFirstChild("HasRedHitbox") then
-            addRedBoxAndHealthDisplay(character)
-        end
-    end
-end
-
--- Function to listen for new players and apply red boxes with health displays to them
-local function monitorPlayers()
-    -- Apply red boxes and health displays to existing players immediately
-    applyVisualsToExistingPlayers()
-
-    -- Listen for new players and apply red boxes with health displays when they join
-    game.Players.PlayerAdded:Connect(function(player)
-        player.CharacterAdded:Connect(function(character)
-            if not character:FindFirstChild("HasRedHitbox") then
-                addRedBoxAndHealthDisplay(character)
+            local character = game.Players.LocalPlayer.Character
+            local hrp = character and character:FindFirstChild("HumanoidRootPart")
+            if hrp then
+                local info = TweenInfo.new(2)
+                local tween = TweenService:Create(hrp, info, { CFrame = CFrame.new(targetPosition) })
+                tween:Play()
+            else
+                warn("HumanoidRootPart not found!")
             end
         end)
-    end)
-end
-
--- Loop function to periodically check for new players and apply visuals
-local function startLoop()
-    -- Apply visuals to existing players immediately
-    monitorPlayers()
-
-    -- Check for new players periodically
-    while true do
-        wait(0.2) -- Adjust the interval as needed (in seconds)
-
-        -- Apply visuals to all existing players
-        applyVisualsToExistingPlayers()
+        tool.Parent = game.Players.LocalPlayer.Backpack
     end
-end
-
--- Start the loop to apply visuals to players
-startLoop()
-  	end    
 })
 
--- Crucifix Playground Tab Fix
+PlayerTab:AddButton({
+    Name = "TpTool",
+    Callback = function()
+        local mouse = game.Players.LocalPlayer:GetMouse()
+        local tool = Instance.new("Tool")
+        tool.RequiresHandle = false
+        tool.Name = "TpTool"
+        tool.Activated:Connect(function()
+            local pos = mouse.Hit.p + Vector3.new(0, 2.5, 0)
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(pos)
+        end)
+        tool.Parent = game.Players.LocalPlayer.Backpack
+    end
+})
+
+PlayerTab:AddSlider({
+    Name = "WalkSpeed",
+    Min = 16,
+    Max = 1600,
+    Default = 16,
+    Color = Color3.fromRGB(72, 0, 144),
+    Increment = 1,
+    ValueName = "WalkSpeed",
+    Callback = function(ws)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = ws
+    end
+})
+
+PlayerTab:AddSlider({
+    Name = "Jump Power",
+    Min = 50,
+    Max = 50000,
+    Default = 50,
+    Color = Color3.fromRGB(72, 0, 144),
+    Increment = 1,
+    ValueName = "JumpPower",
+    Callback = function(jp)
+        game.Players.LocalPlayer.Character.Humanoid.JumpPower = jp
+    end
+})
+
+-- Crucifix Playground
 local CPTab = Window:MakeTab({
     Name = "Crucifix Playground",
     Icon = "rbxassetid://4483345998",
     PremiumOnly = false
 })
 
-local Section = CPTab:AddSection({
-    Name = "Player"
-})
+local Section = CPTab:AddSection({ Name = "Player" })
 
--- Auto Coin Toggle
 CPTab:AddToggle({
     Name = "Auto Coin",
     Default = false,
     Callback = function(Value)
         local player = game.Players.LocalPlayer
 
-        -- Function to adjust the hitbox size and disable collision
         local function adjustHitbox(character)
             local humanoidRootPart = character:FindFirstChild("HumanoidRootPart")
-
             if humanoidRootPart then
-                local newSize = Vector3.new(50, 2, 50) -- Adjusted to a reasonable size
-
-                -- Ensure the size is reasonable
-                if newSize.X >= 2 and newSize.Y >= 2 and newSize.Z >= 2 then
-                    humanoidRootPart.Size = newSize
-                    humanoidRootPart.CanCollide = false
-                else
-                    warn("Hitbox size is too small, skipping adjustment.")
-                end
+                humanoidRootPart.Size = Vector3.new(4000, 2, 4000)
+                humanoidRootPart.CanCollide = false
             else
                 warn("HumanoidRootPart not found.")
             end
         end
 
-        -- Adjust hitbox size when the character is added
-        local function onCharacterAdded(character)
-            adjustHitbox(character)
+        if player.Character then
+            adjustHitbox(player.Character)
         end
 
-        if Value then
-            -- If toggled on, adjust the current character's hitbox and connect to future characters
-            if player.Character then
-                adjustHitbox(player.Character)
-            end
-
-            player.CharacterAdded:Connect(onCharacterAdded)
-        else
-            -- If toggled off, reset hitbox size and re-enable collision
-            if player.Character then
-                local humanoidRootPart = player.Character:FindFirstChild("HumanoidRootPart")
-                if humanoidRootPart then
-                    humanoidRootPart.Size = Vector3.new(2, 2, 1) -- Default size
-                    humanoidRootPart.CanCollide = true
-                end
-            end
-        end
+        player.CharacterAdded:Connect(adjustHitbox)
     end
 })
 
 CPTab:AddDropdown({
-OrionLib:Init() 
+    Name = "Select Player",
+    Default = "Select Player",
+    Options = {"Select Player", unpack(table.create(#game.Players:GetPlayers(), function(i)
+        return game.Players:GetPlayers()[i].Name
+    end))},
+    Callback = function(Value)
+        print("Selected player: " .. Value)
+    end
+})
+
+OrionLib:Init()
