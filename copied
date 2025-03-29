@@ -4,7 +4,7 @@ getgenv().Configs = {
      ["Auto Buso"] = true,
      ["Auto turn on race v3"] = true,
      ["Auto turn on race v4"] = true,
-     ["FPS Boost"] = false,
+     ["FPS Boost"] = true,
      ["Click Time"] = 0.2,
      ["Bypass TP"] = true,
      ["Chat"] = {
@@ -13,7 +13,7 @@ getgenv().Configs = {
      },
      ["Run When Low Health"] = {
          ["Enable"] = true,
-         ["Health"] = 3500,
+         ["Health"] = 2500,
          ["Come back"] = false
      },
      ["Region"] = "???", -- Singapore, United States, Germany, France, India, ??? ...
@@ -93,7 +93,7 @@ getgenv().Configs = {
      },
      ["Theme"] = {
          ["Enable"] = true,
-         ["Name"] = "Hutao", -- Hutao, Raiden, Ayaka, Yelan
+         ["Name"] = "Raiden", -- Hutao, Raiden, Ayaka, Yelan
          ["Custom Theme"] = {
              ["Enable"] = false,
              ["Text Color"] = Color3.fromRGB(231, 85, 88),
